@@ -22,6 +22,18 @@ public class Application {
         if (input == null || input.isEmpty()) {
             return 0;
         }
-        return 0; // 이후 로직 추가 예정
+        // 기본 구분자 처리
+        String delimiterRegex = ",|:"; // 기본 구분자
+        String numbers = input;
+
+        String[] tokens = numbers.split(delimiterRegex);
+        int sum = 0;
+        for (String token : tokens) {
+            if (token.isEmpty()) continue;
+            sum += Integer.parseInt(token.trim());
+        }
+        return sum;
+
+
     }
 }
