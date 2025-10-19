@@ -49,6 +49,26 @@ public class Application {
             delimiterRegex = delimiterRegex + "|" + Pattern.quote(customDelimiter);
         }
 
-        return 0; // 이후 로직 추가
+        // 잘못된 값 처리
+        String[] tokens = numbers.split(delimiterRegex);
+        int sum = 0;
+
+        for (String token : tokens) {
+            if (token.isEmpty()) continue; // 빈 토큰 무시
+
+            int number;
+            try {
+                // trim()을 사용하여 혹시 모를 공백 제거 (안전성 강화)
+                number = Integer.parseInt(token.trim());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("숫자가 아닌 값이 입력되었습니다: " + token);
+            }
+            if (number < 0) {
+                throw new IllegalArgumentException("음수는 허용되지 않습니다: " + number);
+            }
+            sum += number;
+        }
+
+        return sum;
     }
 }
