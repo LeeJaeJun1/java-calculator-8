@@ -17,23 +17,38 @@ public class Application {
         }
     }
 
-    // 빈 문자열 처리
     public static int add(String input) {
         if (input == null || input.isEmpty()) {
-            return 0;
+            return 0; // 빈 문자열 처리
         }
-        // 기본 구분자 처리
+
         String delimiterRegex = ",|:"; // 기본 구분자
         String numbers = input;
 
-        String[] tokens = numbers.split(delimiterRegex);
-        int sum = 0;
-        for (String token : tokens) {
-            if (token.isEmpty()) continue;
-            sum += Integer.parseInt(token.trim());
+        // 커스텀 구분자 처리
+        if (input.startsWith("//")) {
+            // 1. \n 문자의 위치를 찾습니다.
+            int delimiterEnd = input.indexOf("\n");
+
+            if (delimiterEnd == -1) {
+                delimiterEnd = input.indexOf("\\n");
+            }
+
+            // 여전히 구분자 끝을 찾지 못했다면, 잘못된 형식으로 예외를 던집니다.
+            if (delimiterEnd == -1) {
+                throw new IllegalArgumentException("잘못된 입력 형식입니다. 커스텀 구분자 선언 형식이 올바르지 않습니다.");
+            }
+
+            // 구분자 추출: "//" 이후부터 끝까지
+            String customDelimiter = input.substring(2, delimiterEnd);
+
+            // 숫자 문자열 추출: "\n" 또는 "\\n" 이후부터 끝까지
+            numbers = input.substring(delimiterEnd + 2); // "\n" 또는 "\\n"의 길이는 2
+
+            // 구분자 정규식 업데이트
+            delimiterRegex = delimiterRegex + "|" + Pattern.quote(customDelimiter);
         }
-        return sum;
 
-
+        return 0; // 이후 로직 추가
     }
 }
